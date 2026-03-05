@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  ml-jarvis:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+      - ./models:/app/models
+      - ./checkpoints:/app/checkpoints
+    environment:
+      - PYTHONPATH=/app
+    depends_on:
+      - redis
+      - chromadb
+      - neo4j
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+
+  neo4j:
+    image: neo4j:5.13
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/neo4j
+      - NEO4J_dbms_memory_pagecache_size=512MB
+      - NEO4J_dbms_memory_heap_initial__size=512MB
+      - NEO4J_dbms_memory_heap_max__size=512MB

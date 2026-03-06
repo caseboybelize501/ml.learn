@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: ml-learn
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
